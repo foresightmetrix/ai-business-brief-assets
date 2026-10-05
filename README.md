@@ -17,8 +17,10 @@ These URLs appear in email that has **already been delivered to inboxes**:
 
 ```
 banner-dark-compact.jpg
+banners/ai-business-brief-dark-compact-v2.jpg
 sig-09c720b4cfe39108.png
 2026-09/cowen-sana-ai-summit-still.jpg
+stills/2026-10/mckinsey-agent-economics-still.jpg
 ```
 
 Renaming, moving, re-pointing, or deleting any of them breaks images in mail people
