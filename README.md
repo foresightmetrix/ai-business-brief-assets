@@ -21,6 +21,11 @@ banners/ai-business-brief-dark-compact-v2.jpg
 sig-09c720b4cfe39108.png
 2026-09/cowen-sana-ai-summit-still.jpg
 stills/2026-10/mckinsey-agent-economics-still.jpg
+stills/2026-11/investing-smarter-with-ai-still.jpg
+stills/2026-11/autor-expertise-ai-still.jpg
+stills/2026-11/investing-smarter-with-ai-thumb.jpg
+stills/2026-11/ai-marketing-playbook-thumb.jpg
+stills/2026-11/solving-hard-problems-with-ai-thumb.jpg
 ```
 
 Renaming, moving, re-pointing, or deleting any of them breaks images in mail people
