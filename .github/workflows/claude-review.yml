@@ -49,7 +49,7 @@ jobs:
             ## 1. Gather context
             - `gh pr view ${{ github.event.pull_request.number }} --json title,body,closingIssuesReferences` for title, description, linked issues. Always pass `--json`; plain `gh pr view` needs check-status access this job's token lacks.
             - `gh pr diff ${{ github.event.pull_request.number }}` for the full diff.
-            - Read the root CLAUDE.md and any CLAUDE.md in directories of changed files. Their rules are this repo's standards.
+            - Read the root CLAUDE.md and AGENTS.md, and any CLAUDE.md or AGENTS.md in directories of changed files. Their rules are this repo's standards.
             - List existing inline review comments:
               `gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments --paginate`
               Never post an issue that an existing comment already raises.
@@ -61,7 +61,7 @@ jobs:
             Read surrounding code as needed to confirm each finding. Report only issues in code this PR adds or changes.
 
             Severity labels:
-            - 🔴 **Bug**: wrong results, crash, data loss, security hole, broken build, or a clear CLAUDE.md violation (quote the rule).
+            - 🔴 **Bug**: wrong results, crash, data loss, security hole, broken build, or a clear CLAUDE.md or AGENTS.md violation (quote the rule).
             - 🟡 **Risk**: likely problem under realistic inputs: unhandled error path, race, missing validation, performance trap.
             - 🔵 **Nit**: small readability or consistency fix. Post at most 5, and only with a committable suggestion.
 
