@@ -14,7 +14,8 @@ concurrency:
 
 jobs:
   review:
-    if: github.event.pull_request.draft == false
+    # Skip drafts and fork PRs (forks get no secrets).
+    if: github.event.pull_request.draft == false && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
     # The review uses this job's own token (github_token below), limited to
