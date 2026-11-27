@@ -47,7 +47,7 @@ jobs:
             Review this pull request and post the results to GitHub.
 
             ## 1. Gather context
-            - `gh pr view ${{ github.event.pull_request.number }}` for title, description, linked issues.
+            - `gh pr view ${{ github.event.pull_request.number }} --json title,body,closingIssuesReferences` for title, description, linked issues. Always pass `--json`; plain `gh pr view` needs check-status access this job's token lacks.
             - `gh pr diff ${{ github.event.pull_request.number }}` for the full diff.
             - Read the root CLAUDE.md and any CLAUDE.md in directories of changed files. Their rules are this repo's standards.
             - List existing inline review comments:
@@ -68,11 +68,11 @@ jobs:
             Do not flag: pre-existing issues, things a linter or formatter catches, subjective style, or anything you are not confident is real. Before posting, re-check every finding against the actual code and drop any you cannot confirm. False positives cost more than misses.
 
             ## 3. Post inline comments
-            Use `mcp__github_inline_comment__create_inline_comment` with `confirmed: true`, one comment per issue, starting with the severity label. Include a ```suggestion block only when committing it fully fixes the issue and is under 6 lines.
+            Use `mcp__github_inline_comment__create_inline_comment` with `confirmed: true` and `commit_id` set to the HEAD SHA above, one comment per issue, starting with the severity label. Include a ```suggestion block only when committing it fully fixes the issue and is under 6 lines.
 
             ## 4. Post or update the summary comment
-            Look for an existing PR comment whose body starts with `<!-- claude-review-summary -->`:
-            `gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments --paginate --jq '.[] | select(.body | startswith("<!-- claude-review-summary -->")) | .id'`
+            Look for an existing summary comment posted by this workflow:
+            `gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments --paginate --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- claude-review-summary -->"))) | .id'`
             If found, replace its body with `gh api -X PATCH repos/${{ github.repository }}/issues/comments/<id> -f body=...`.
             Otherwise create it with `gh pr comment ${{ github.event.pull_request.number }} --body ...`.
 
@@ -87,11 +87,13 @@ jobs:
             |---|---|
             | ... | one line each; group related files |
 
-            **Findings:** 🔴 N · 🟡 N · 🔵 N (new this pass; list each with a one-line link to its inline comment)
+            **Open findings:** 🔴 N · 🟡 N · 🔵 N
+            - one line per open finding, linked to its inline comment; prefix findings first posted this pass with **New:**
+
             **Verdict:** Looks good to merge / Fix 🔴 items before merging / Needs discussion
 
             <sub>Reviewed at <short head sha></sub>
             ```
-            If there are no findings, say "No issues found." under Findings.
+            Open findings = this pass's new findings plus earlier review comments (from any reviewer) that still apply to the current head. Check each earlier comment against the current code; drop it only if the code now resolves it. Base the verdict on all open findings. Write "No issues found." only when nothing is open.
 
             Use only the gh commands above for GitHub. Do not modify files, push commits, or approve/request changes.
